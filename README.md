@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Capacitor Biometric Auth Demo
 
-## Getting Started
+A simple Next.js frontend wrapped in Capacitor, featuring secure biometric login (Face ID/Touch ID) and background privacy protection.
 
-First, run the development server:
+---
 
+## 🚀 Setup Instructions
+
+1. **Environment Setup**
+   Create a `.env` file in the root directory:
+   ```bash
+   NEXT_PUBLIC_API_BASE_URL=https://your-api.com/api
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Build the Next.js App**
+   *(This exports static HTML/JS/CSS to the `out/` folder)*
+   ```bash
+   npm run build
+   ```
+
+4. **Sync with Capacitor**
+   *(This copies the `out/` folder into the native Android/iOS projects)*
+   ```bash
+   npx cap sync
+   ```
+
+5. **Run on Android**
+   *(Requires Android Studio & SDKs)*
+   ```bash
+   npx cap run android
+   ```
+
+**To run in browser for web development:**
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🔒 How Biometric Auth Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app implements a **BiometricGuard** component that manages security:
 
-## Learn More
+1. **Check Biometry**: On launch, the app verifies if biometrics (Face/Fingerprint) or device credentials (PIN/Pattern) are available.
+2. **Authenticate**: It prompts the user natively. If successful, the app unlocks.
+3. **Background Privacy**: By listening to Capacitor's `appStateChange` event, the app instantly locks itself the moment the user sends it to the background. 
+4. **Resume Protection**: When returning to the foreground, the biometric prompt automatically re-triggers to prove the user's identity again before revealing the screen.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📦 Capacitor Plugins Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **`@aparajita/capacitor-biometric-auth`**: Handles the native biometric prompt (Face, Fingerprint, Iris) and secure device credential fallback (PIN/Pattern).
+- **`@aparajita/capacitor-secure-storage`**: Safely stores authentication tokens in the device's native secure enclave (Keychain/Keystore).
+- **`@capacitor-community/privacy-screen`**: Prevents the OS from taking screenshots of the app while it sits in the "Recent Apps" app switcher.
+- **`@capacitor/app`**: Listens for app state changes (foreground vs. background) to know when to lock the app.
