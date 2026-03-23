@@ -23,13 +23,19 @@ A simple Next.js frontend wrapped in Capacitor, featuring secure biometric login
    npm run build
    ```
 
-4. **Sync with Capacitor**
+4. **Add Native Platform** (First time only)
+   *(This initializes the native Android folder)*
+   ```bash
+   npx cap add android
+   ```
+
+5. **Sync with Capacitor**
    *(This copies the `out/` folder into the native Android/iOS projects)*
    ```bash
    npx cap sync
    ```
 
-5. **Run on Android**
+6. **Run on Android**
    *(Requires Android Studio & SDKs)*
    ```bash
    npx cap run android
